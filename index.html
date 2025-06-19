@@ -3,346 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shubham Dutta - Product Design & Development</title>
-    
-    <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
-
+    <title>Shubham Dutta - 3D Interactive Portfolio</title>
     <style>
-        /* Custom styles for the 3D flip card and other effects */
-        html {
-            scroll-behavior: smooth;
-        }
+        /* Basic reset and styling for the body */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a; /* Fallback for when video doesn't load */
-            color: #e2e8f0;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #00000a; /* Dark blue fallback */
+            color: white;
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
         }
 
-        /* --- VIDEO BACKGROUND STYLES --- */
-        .video-background-container {
+        /* The canvas for the 3D background */
+        canvas#bg {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0; /* Place it in the background */
+            z-index: -1; /* Place it behind all other content */
         }
 
-        .video-background-container iframe {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100vw;
-            height: 56.25vw; /* 16:9 aspect ratio */
-            min-width: 177.77vh; /* Cover screen */
+        /* Styling for the main content that scrolls over the background */
+        main {
+            position: absolute; /* Take it out of normal flow to place over canvas */
+            width: 100%;
+            padding: 2rem;
+            box-sizing: border-box; /* Ensures padding doesn't add to the width */
+        }
+
+        /* Container for each content section */
+        section {
+            display: grid;
+            place-content: center;
+            align-content: center;
             min-height: 100vh;
-            transform: translate(-50%, -50%);
-            pointer-events: none; /* Allow clicks to go through to content */
+            padding: 2rem 0;
+            box-sizing: border-box;
+        }
+        
+        /* Styling for the text blocks */
+        .content-block {
+            background: rgba(10, 5, 20, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .video-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(10, 10, 10, 0.75); /* Dark overlay for text readability */
-            z-index: 1;
-        }
-
-        /* --- Stacking Content On Top --- */
-        /* Make all direct children of body sit on top of the video background */
-        body > * {
-            position: relative;
-            z-index: 2;
-        }
-
-
-        /* --- Original Styles --- */
-        .text-gradient {
-            background-image: linear-gradient(to right, #ec4899, #8b5cf6);
+        h1, h2, h3 {
+            font-weight: 800;
+            background: linear-gradient(to right, #c084fc, #fda4af); /* Purple to Pink */
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
 
-        .flip-card {
-            background-color: transparent;
-            perspective: 1000px;
+        h1 { font-size: 4rem; text-align: center; }
+        h2 { font-size: 3rem; margin-bottom: 1.5rem; text-align: center; }
+        h3 { font-size: 1.5rem; margin-bottom: 1rem; color: #f0abfc; }
+        p, li { line-height: 1.7; color: #d1d5db; }
+        p { margin-bottom: 1rem; }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
         }
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-        }
-        .flip-card:hover .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 1rem;
+        
+        .skills-list {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .skill-tag {
+            background-color: rgba(139, 92, 246, 0.2); /* Semi-transparent purple */
+            color: #e9d5ff;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 1rem;
+            border: 1px solid rgba(167, 139, 250, 0.4);
+        }
+
+        .social-links {
+            display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 1.5rem;
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
-        .flip-card-front {
-            background: linear-gradient(135deg, #1e1b4b, #312e81);
-            border: 1px solid #4f46e5;
+        .social-links a {
+            color: #d1d5db;
+            transition: all 0.3s ease;
         }
-        .flip-card-back {
-            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+        .social-links a:hover {
             color: white;
-            transform: rotateY(180deg);
+            transform: scale(1.1);
+        }
+        .social-links svg {
+            width: 2.5rem;
+            height: 2.5rem;
         }
 
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .typed-cursor {
-            opacity: 1;
-            animation: blink 0.7s infinite;
-        }
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        .aspect-w-16 {
-            position: relative;
-            padding-bottom: 56.25%;
-        }
-        .aspect-w-16 > iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
     </style>
 </head>
-<body class="antialiased">
+<body>
 
-    <!-- VIDEO BACKGROUND - This sits behind all other content -->
-    <div class="video-background-container">
-        <div class="video-overlay"></div>
-        <iframe 
-            src="https://www.youtube.com/embed/5_kSpo4nMc0?autoplay=1&mute=1&loop=1&playlist=5_kSpo4nMc0&controls=0&showinfo=0&modestbranding=1&playsinline=1" 
-            frameborder="0" 
-            allow="autoplay; encrypted-media" 
-            allowfullscreen>
-        </iframe>
-    </div>
+    <!-- The Canvas where the 3D scene will be rendered -->
+    <canvas id="bg"></canvas>
 
-    <!-- Header & Navigation -->
-    <header class="bg-black/30 backdrop-blur-lg sticky top-0 border-b border-white/10">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-white">Shubham Dutta</a>
-            <div class="space-x-8 text-lg">
-                <a href="#about" class="text-slate-300 hover:text-white transition-colors duration-300">About</a>
-                <a href="#skills" class="text-slate-300 hover:text-white transition-colors duration-300">Skills</a>
-                <a href="#projects" class="text-slate-300 hover:text-white transition-colors duration-300">Experience</a>
-                <a href="#videos" class="text-slate-300 hover:text-white transition-colors duration-300">Videos</a>
-                <a href="#contact" class="text-slate-300 hover:text-white transition-colors duration-300">Contact</a>
+    <!-- The main content that will scroll over the 3D background -->
+    <main>
+        <section>
+            <div class="content-block">
+                <h1>Shubham Dutta</h1>
+                <p style="text-align: center; font-size: 1.5rem; color: #e5e7eb;">Mechanical Engineering | Product Design | Digital Creativity</p>
             </div>
-        </nav>
-    </header>
+        </section>
 
-    <!-- Hero Section -->
-    <main class="container mx-auto px-6 py-24 text-center">
-        <h1 class="text-5xl md:text-7xl font-extrabold text-white leading-tight">
-            I design & build <span id="typed-text" class="text-gradient"></span><span class="typed-cursor">|</span>
-        </h1>
-        <p class="mt-6 text-xl text-slate-400 max-w-2xl mx-auto">
-            A Mechanical Engineering student blending hardware innovation with digital creativity.
-        </p>
-        <a href="#projects" class="mt-10 inline-block bg-gradient-to-r from-pink-500 to-violet-600 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-            View My Work
-        </a>
+        <section>
+             <div class="content-block">
+                <h2>About Me</h2>
+                <p>I'm a Mechanical Engineering student at IIT Bombay (Class of 2024) with a passion for building things — from hardware prototypes to digital content. In my second year, I joined a startup as a graphic design intern, but quickly transitioned into product development. I led the mechanical and product design of an IoT-based startup, collaborating closely with a small team to design enclosures, assist with PCB integration, and prototype functional hardware.</p>
+                <p>Alongside this, I was actively involved in tech teams, developing teamwork, communication, and project management skills within competitive technical environments. Outside the classroom, I work as a freelancer and YouTuber, creating content on tech, editing videos, and building custom PC setups. I’m currently exploring opportunities where I can contribute to real-world projects that combine engineering, design, and digital creativity.</p>
+            </div>
+        </section>
+        
+        <section>
+            <div class="content-block">
+                <h2>Skills & Interests</h2>
+                <div class="skills-grid">
+                    <div>
+                        <h3>Tools I Work With</h3>
+                        <div class="skills-list">
+                            <span class="skill-tag">SolidWorks</span>
+                            <span class="skill-tag">KiCAD</span>
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">Figma</span>
+                            <span class="skill-tag">DaVinci Resolve</span>
+                            <span class="skill-tag">Arduino</span>
+                            <span class="skill-tag">Fusion 360</span>
+                            <span class="skill-tag">Blender</span>
+                        </div>
+                    </div>
+                     <div>
+                        <h3>My Interests</h3>
+                        <div class="skills-list">
+                            <span class="skill-tag">Product Development</span>
+                            <span class="skill-tag">IoT</span>
+                            <span class="skill-tag">Hardware Startups</span>
+                            <span class="skill-tag">PC Tech</span>
+                            <span class="skill-tag">Content Creation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="content-block">
+                <h2>Let's Connect</h2>
+                 <p style="text-align: center;">I'm always open to new opportunities and collaborations. Feel free to reach out via my social platforms!</p>
+                 <div class="social-links">
+                    <a href="https://github.com/Shinobi-hub" target="_blank" aria-label="GitHub"><svg fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.492.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.942.359.308.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg></a>
+                    <a href="https://www.linkedin.com/in/shubham-designer/" target="_blank" aria-label="LinkedIn"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                    <a href="https://wa.me/916362983679" target="_blank" aria-label="WhatsApp"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.847 6.039l-1.109 4.057 4.144-1.082zM12 5.995c.138.001.276.005.413.013l.001.001h.001c.145.01.29.023.433.04l.003.001c.281.04.557.1.828.175l.004.001c.27.075.532.16.787.255l.004.002c.247.09.487.188.717.29l.005.002c.221.1.434.208.638.32l.005.003c.196.104.385.215.564.33l.006.004c3.085 1.959 3.485 5.92 1.341 8.82l-.003.004c-2.245 2.8-5.968 3.6-8.924 1.8l-.004-.002c-.39-.22-.764-.465-1.118-.73l-.004-.003c-.34-.255-.664-.525-.97-.81l-.004-.004c-.29-.27-.56-.55-.81-.84l-.003-.004c-.48-.58-.88-1.21-1.19-1.88l-.002-.004c-.3-.64-.52-1.32-.65-2.02l-.002-.007c-.13-.7-.18-1.42-.17-2.14.05-4.5 3.7-8.15 8.2-8.15z"></path></svg></a>
+                    <a href="https://www.youtube.com/@shinobi6066" target="_blank" aria-label="YouTube"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg></a>
+                    <a href="https://www.instagram.com/shub.hamxd/" target="_blank" aria-label="Instagram"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"></path></svg></a>
+                    <a href="https://www.pixiv.net/en/users/63648103" target="_blank" aria-label="Pixiv"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM15.28 17.5h-1.57l-.66-1.51h-2.1l-.66 1.51H8.72l3.28-7.59h1.44l2.5 5.67V17.5z"></path><path d="M13.29 14.86l-.99-2.28c-.1-.22-.18-.45-.25-.72h-.03c-.07.27-.15.5-.25.72l-.99 2.28h2.51z" fill-opacity="0.7"></path></svg></a>
+                </div>
+            </div>
+        </section>
     </main>
-
-    <!-- About Section -->
-    <section id="about" class="py-20 reveal">
-        <div class="container mx-auto px-6 max-w-4xl text-left bg-black/40 backdrop-blur-sm p-8 md:p-12 rounded-2xl">
-            <h2 class="text-4xl font-bold text-white mb-4 text-center">About Me</h2>
-            <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-violet-600 mx-auto mb-8 rounded"></div>
-            <div class="text-lg text-slate-300 leading-relaxed space-y-6">
-                <p>
-                    I'm a Mechanical Engineering student at IIT Bombay (Class of 2024) with a passion for building things — from hardware prototypes to digital content. In my second year, I joined a startup as a graphic design intern, but quickly transitioned into product development. I led the mechanical and product design of an IoT-based startup, collaborating closely with a small team to design enclosures, assist with PCB integration, and prototype functional hardware. That hands-on experience sparked my love for products that blend engineering, design, and practical problem-solving.
-                </p>
-                <p>
-                    Alongside this, I was actively involved in tech teams during my third and fourth years — serving as Vice President of Marketing for Team Rakshak and Head of Design for Inter IIT Tech 12.0. In both roles, I managed design elements like team apparel, logos, and branding, and contributed to securing sponsorships. These leadership experiences helped me develop teamwork, communication, and project management skills within competitive technical environments.
-                </p>
-                <p>
-                    Outside the classroom, I work as a freelancer and YouTuber, creating content on tech, editing videos, and building custom PC setups. I’m especially interested in the intersection of hardware, tech culture, and creative media. I’m currently exploring opportunities where I can contribute to real-world projects that combine engineering, design, and digital creativity.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="py-20 reveal">
-        <div class="container mx-auto px-6 max-w-4xl bg-black/40 backdrop-blur-sm p-8 md:p-12 rounded-2xl">
-            <h2 class="text-4xl font-bold text-white mb-4 text-center">Tools & Skills</h2>
-            <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-violet-600 mx-auto mb-12 rounded"></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div>
-                    <h3 class="text-2xl font-bold text-white mb-6 text-center md:text-left">Tools I Work With</h3>
-                    <div class="flex flex-wrap gap-3 justify-center md:justify-start">
-                        <span class="bg-slate-700 text-slate-200 py-2 px-4 rounded-full">SolidWorks</span>
-                        <span class="bg-slate-700 text-slate-200 py-2 px-4 rounded-full">KiCAD</span>
-                        <span class="bg-slate-700 text-slate-200 py-2 px-4 rounded-full">Python</span>
-                        <span class="bg-slate-700 text-slate-200 py-2 px-4 rounded-full">Figma</span>
-                        <span class="bg-slate-700 text-slate-200 py-2 px-4 rounded-full">DaVinci Resolve</span>
-                        <span class="bg-slate-700 text-slate-200 py-2 px-4 rounded-full">Arduino</span>
-                        <span class="bg-slate-700 text-slate-200 py-2 px-4 rounded-full">Fusion 360</span>
-                        <span class="bg-slate-700 text-slate-200 py-2 px-4 rounded-full">Blender</span>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-white mb-6 text-center md:text-left">Interests</h3>
-                    <div class="flex flex-wrap gap-3 justify-center md:justify-start">
-                        <span class="bg-slate-700 text-slate-200 py-2 px-4 rounded-full">Product Development</span>
-                        <span class="bg-slate-700 text-slate-200 py-2 px-4 rounded-full">IoT</span>
-                        <span class="bg-slate-700 text-slate-200 py-2 px-4 rounded-full">Hardware Startups</span>
-                        <span class="bg-slate-700 text-slate-200 py-2 px-4 rounded-full">PC Tech</span>
-                        <span class="bg-slate-700 text-slate-200 py-2 px-4 rounded-full">Content Creation</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="py-20 reveal">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-white mb-4 text-center">My Experience</h2>
-            <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-violet-600 mx-auto mb-12 rounded"></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <div class="flip-card h-80 reveal"><div class="flip-card-inner rounded-2xl shadow-lg"><div class="flip-card-front p-6"><h3 class="text-3xl font-bold text-white">IoT Startup</h3><p class="text-slate-300 mt-2">Lead Product Designer</p></div><div class="flip-card-back"><h3 class="text-2xl font-bold">Key Role</h3><p class="mt-2 text-sm">Designed hardware enclosures, assisted with PCB integration, and led prototyping efforts.</p></div></div></div>
-                <div class="flip-card h-80 reveal"><div class="flip-card-inner rounded-2xl shadow-lg"><div class="flip-card-front p-6"><h3 class="text-3xl font-bold text-white">Team Leadership</h3><p class="text-slate-300 mt-2">Team Rakshak & Inter-IIT</p></div><div class="flip-card-back"><h3 class="text-2xl font-bold">Key Role</h3><p class="mt-2 text-sm">VP of Marketing & Head of Design. Managed branding, apparel, and sponsorships.</p></div></div></div>
-                <div class="flip-card h-80 reveal"><div class="flip-card-inner rounded-2xl shadow-lg"><div class="flip-card-front p-6"><h3 class="text-3xl font-bold text-white">Creator</h3><p class="text-slate-300 mt-2">Freelancer & YouTuber</p></div><div class="flip-card-back"><h3 class="text-2xl font-bold">Key Role</h3><p class="mt-2 text-sm">Create tech content, edit videos, and build custom PC setups for clients and my channel.</p></div></div></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Video Section -->
-    <section id="videos" class="py-20 reveal">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-white mb-4 text-center">Video Portfolio</h2>
-            <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-violet-600 mx-auto mb-12 rounded"></div>
-            <p class="text-center text-lg text-slate-300 max-w-2xl mx-auto mb-12">
-                A collection of my work from YouTube, including tech reviews, PC builds, and video editing projects.
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <div class="reveal"><div class="aspect-w-16 rounded-lg overflow-hidden shadow-2xl"><iframe src="https://www.youtube.com/embed/VIDEO_ID_1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><h3 class="text-xl font-bold text-white mt-4">Title of Your First Video</h3></div>
-                <div class="reveal"><div class="aspect-w-16 rounded-lg overflow-hidden shadow-2xl"><iframe src="https://www.youtube.com/embed/VIDEO_ID_2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><h3 class="text-xl font-bold text-white mt-4">Title of Your Second Video</h3></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 text-center reveal">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-white mb-4">Get In Touch</h2>
-            <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-violet-600 mx-auto mb-8 rounded"></div>
-            <p class="text-lg text-slate-300 max-w-2xl mx-auto mb-10">
-                I’m currently exploring opportunities where I can contribute to real-world projects. Let's connect!
-            </p>
-            <div class="flex justify-center items-center space-x-6 md:space-x-8">
-                <a href="https://github.com/Shinobi-hub" target="_blank" class="text-slate-300 hover:text-white transition-transform duration-300 transform hover:scale-110" aria-label="GitHub"><svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.492.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.942.359.308.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg></a>
-                <a href="https://www.linkedin.com/in/shubham-designer/" target="_blank" class="text-slate-300 hover:text-white transition-transform duration-300 transform hover:scale-110" aria-label="LinkedIn"><svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
-                <a href="https://wa.me/916362983679" target="_blank" class="text-slate-300 hover:text-white transition-transform duration-300 transform hover:scale-110" aria-label="WhatsApp"><svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.847 6.039l-1.109 4.057 4.144-1.082zM12 5.995c.138.001.276.005.413.013l.001.001h.001c.145.01.29.023.433.04l.003.001c.281.04.557.1.828.175l.004.001c.27.075.532.16.787.255l.004.002c.247.09.487.188.717.29l.005.002c.221.1.434.208.638.32l.005.003c.196.104.385.215.564.33l.006.004c3.085 1.959 3.485 5.92 1.341 8.82l-.003.004c-2.245 2.8-5.968 3.6-8.924 1.8l-.004-.002c-.39-.22-.764-.465-1.118-.73l-.004-.003c-.34-.255-.664-.525-.97-.81l-.004-.004c-.29-.27-.56-.55-.81-.84l-.003-.004c-.48-.58-.88-1.21-1.19-1.88l-.002-.004c-.3-.64-.52-1.32-.65-2.02l-.002-.007c-.13-.7-.18-1.42-.17-2.14.05-4.5 3.7-8.15 8.2-8.15z"></path></svg></a>
-                <a href="https://www.youtube.com/@shinobi6066" target="_blank" class="text-slate-300 hover:text-white transition-transform duration-300 transform hover:scale-110" aria-label="YouTube"><svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg></a>
-                <a href="https://www.instagram.com/shub.hamxd/" target="_blank" class="text-slate-300 hover:text-white transition-transform duration-300 transform hover:scale-110" aria-label="Instagram"><svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"></path></svg></a>
-                <a href="https://www.pixiv.net/en/users/63648103" target="_blank" class="text-slate-300 hover:text-white transition-transform duration-300 transform hover:scale-110" aria-label="Pixiv"><svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM15.28 17.5h-1.57l-.66-1.51h-2.1l-.66 1.51H8.72l3.28-7.59h1.44l2.5 5.67V17.5z"></path><path d="M13.29 14.86l-.99-2.28c-.1-.22-.18-.45-.25-.72h-.03c-.07.27-.15.5-.25.72l-.99 2.28h2.51z" fill-opacity="0.7"></path></svg></a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="border-t border-gray-800 py-6">
-        <div class="container mx-auto px-6 text-center text-slate-400">
-            <p>&copy; 2025 Shubham Dutta. All Rights Reserved.</p>
-        </div>
-    </footer>
-
-    <script>
-        // Interactive JavaScript
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // --- Typing animation ---
-            const typedTextSpan = document.querySelector("#typed-text");
-            const textArray = ["hardware prototypes.", "digital products.", "creative solutions.", "IoT devices."];
-            const typingDelay = 100;
-            const erasingDelay = 50;
-            const newTextDelay = 2000; // Delay between current and next text
-            let textArrayIndex = 0;
-            let charIndex = 0;
-
-            function type() {
-                if (charIndex < textArray[textArrayIndex].length) {
-                    typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
-                    charIndex++;
-                    setTimeout(type, typingDelay);
-                } else {
-                    setTimeout(erase, newTextDelay);
-                }
+    
+    <!-- Import Map for Three.js -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
             }
+        }
+    </script>
 
-            function erase() {
-                if (charIndex > 0) {
-                    typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
-                    charIndex--;
-                    setTimeout(erase, erasingDelay);
-                } else {
-                    textArrayIndex++;
-                    if (textArrayIndex >= textArray.length) textArrayIndex = 0;
-                    setTimeout(type, typingDelay + 1100);
-                }
-            }
+    <!-- Main JavaScript for the 3D scene -->
+    <script type="module">
+        import * as THREE from 'three';
+
+        // --- Basic Setup ---
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.querySelector('#bg'),
+            alpha: true, 
+        });
+
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.setZ(20);
+
+        // --- Lighting ---
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+        directionalLight.position.set(1, 1, 1);
+        scene.add(directionalLight);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        
+        // --- Main 3D Object (Crystal) ---
+        const geometry = new THREE.IcosahedronGeometry(7, 0);
+        const material = new THREE.MeshPhysicalMaterial({
+            roughness: 0,
+            transmission: 1,
+            thickness: 1.5,
+            color: new THREE.Color(0x9333ea), // Purple color
+        });
+        const crystal = new THREE.Mesh(geometry, material);
+        scene.add(crystal);
+
+        // --- Nebula Background ---
+        const loader = new THREE.TextureLoader();
+        loader.load('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2400&auto=format&fit=crop', function(texture) {
+            // A spherical background is simpler than a cube map and works well
+            const sphereGeo = new THREE.SphereGeometry(500, 60, 40);
+            // Invert the geometry on the x-axis so that all of the faces point inward
+            sphereGeo.scale(-1, 1, 1);
+            const sphereMat = new THREE.MeshBasicMaterial({ map: texture });
+            const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
+            scene.add(sphereMesh);
+        });
+
+
+        // --- Mouse Interaction ---
+        let mouseX = 0;
+        let mouseY = 0;
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // --- Scroll Animation ---
+        function moveCamera() {
+            const t = document.body.getBoundingClientRect().top;
             
-            if (textArray.length) setTimeout(type, newTextDelay + 250);
+            // Rotate object on scroll
+            crystal.rotation.x = t * 0.0005;
+            crystal.rotation.y = t * 0.00075;
 
-            // --- Scroll reveal animation ---
-            const revealElements = document.querySelectorAll('.reveal');
+            // Move camera on scroll
+            camera.position.z = 20 + t * -0.01;
+        }
+        document.body.onscroll = moveCamera;
+        moveCamera(); 
+
+        // --- Animation Loop ---
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Subtle auto-rotation
+            crystal.rotation.x += 0.0005;
+            crystal.rotation.y += 0.0005;
+
+            // Mouse move effect on camera for parallax
+            camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
+            camera.position.y += (mouseY * 5 - camera.position.y) * 0.05;
             
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, {
-                threshold: 0.1
-            });
+            renderer.render(scene, camera);
+        }
+        animate();
 
-            revealElements.forEach(element => {
-                revealObserver.observe(element);
-            });
+        // --- Handle Window Resizing ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         });
     </script>
 </body>
