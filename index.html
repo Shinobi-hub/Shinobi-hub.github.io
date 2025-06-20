@@ -162,7 +162,7 @@
             display: inline-block;
         }
 
-        /* --- NEW: Sun/Moon Theme Toggle --- */
+        /* --- Sun/Moon Theme Toggle --- */
         #theme-toggle {
             background-color: var(--toggle-bg);
             border-radius: 9999px;
@@ -204,7 +204,8 @@
     <!-- Header & Navigation -->
     <header class="backdrop-blur-lg sticky top-0 z-50 border-b border-gray-500/20" style="background-color: var(--header-bg);">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold">Shubham Dutta</a>
+            <!-- Changed href to point to index.html -->
+            <a href="index.html" class="text-2xl font-bold">Shubham Dutta</a>
             <div class="hidden md:flex items-center space-x-8 text-lg">
                 <a href="#about" class="hover:text-pink-500 transition-colors duration-300">About</a>
                 <a href="#skills" class="hover:text-pink-500 transition-colors duration-300">Skills</a>
@@ -293,36 +294,45 @@
             <h2 class="text-4xl font-bold mb-4 text-center">My Experience</h2>
             <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-violet-600 mx-auto mb-12 rounded"></div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <!-- Card 1 -->
-                <div class="experience-card reveal">
-                    <div class="title">
-                        <h3 class="text-3xl font-bold">IoT Startup</h3>
-                        <p class="text-secondary mt-2">Lead Product Designer</p>
+                
+                <!-- Card 1: Wrapped with an anchor tag -->
+                <a href="iot-project-details.html" class="block">
+                    <div class="experience-card reveal">
+                        <div class="title">
+                            <h3 class="text-3xl font-bold">IoT Startup</h3>
+                            <p class="text-secondary mt-2">Lead Product Designer</p>
+                        </div>
+                        <div class="details">
+                            <p class="mt-4 text-sm text-secondary">Designed hardware enclosures, assisted with PCB integration, and led prototyping efforts.</p>
+                        </div>
                     </div>
-                    <div class="details">
-                        <p class="mt-4 text-sm text-secondary">Designed hardware enclosures, assisted with PCB integration, and led prototyping efforts.</p>
+                </a>
+                
+                <!-- Card 2: Wrapped with an anchor tag -->
+                <a href="team-leadership-details.html" class="block">
+                    <div class="experience-card reveal">
+                        <div class="title">
+                            <h3 class="text-3xl font-bold">Team Leadership</h3>
+                            <p class="text-secondary mt-2">Team Rakshak & Inter-IIT</p>
+                        </div>
+                        <div class="details">
+                            <p class="mt-4 text-sm text-secondary">VP of Marketing & Head of Design. Managed branding, apparel, and sponsorships.</p>
+                        </div>
                     </div>
-                </div>
-                <!-- Card 2 -->
-                 <div class="experience-card reveal">
-                    <div class="title">
-                        <h3 class="text-3xl font-bold">Team Leadership</h3>
-                        <p class="text-secondary mt-2">Team Rakshak & Inter-IIT</p>
+                </a>
+
+                <!-- Card 3: Wrapped with an anchor tag -->
+                <a href="creator-details.html" class="block">
+                    <div class="experience-card reveal">
+                        <div class="title">
+                            <h3 class="text-3xl font-bold">Creator</h3>
+                            <p class="text-secondary mt-2">Freelancer & YouTuber</p>
+                        </div>
+                        <div class="details">
+                            <p class="mt-4 text-sm text-secondary">Create tech content, edit videos, and build custom PC setups for clients and my channel.</p>
+                        </div>
                     </div>
-                    <div class="details">
-                        <p class="mt-4 text-sm text-secondary">VP of Marketing & Head of Design. Managed branding, apparel, and sponsorships.</p>
-                    </div>
-                </div>
-                <!-- Card 3 -->
-                 <div class="experience-card reveal">
-                    <div class="title">
-                        <h3 class="text-3xl font-bold">Creator</h3>
-                        <p class="text-secondary mt-2">Freelancer & YouTuber</p>
-                    </div>
-                    <div class="details">
-                        <p class="mt-4 text-sm text-secondary">Create tech content, edit videos, and build custom PC setups for clients and my channel.</p>
-                    </div>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -352,7 +362,6 @@
         </div>
     </footer>
     
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
@@ -427,10 +436,10 @@
             window.addEventListener('scroll', () => {
                 const scrollY = window.scrollY;
                 if(marqueeContent) {
-                   marqueeContent.style.transform = `translateX(${scrollY * 0.2}px)`;
+                   marqueeContent.style.transform = `translateX(-${scrollY * 0.2}px)`;
                 }
             });
         });
     </script>
 </body>
-</ht
+</html>
