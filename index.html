@@ -374,7 +374,7 @@
             window.addEventListener('scroll', () => {
                 const scrollY = window.scrollY;
                 if(marqueeContent) {
-                   marqueeContent.style.transform = `translateX(-${scrollY * -0.2}px)`;
+                   marqueeContent.style.transform = `translateX(${scrollY * 0.2}px)`;
                 }
             });
         });
