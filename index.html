@@ -35,6 +35,8 @@
             --card-border: #4f46e5;
             --card-text-color: #ffffff;
             --h3-color: #e2e8f0;
+            --toggle-bg: rgba(71, 85, 105, 0.4);
+            --toggle-icon-color: #f1f5f9;
         }
 
         /* Light Mode */
@@ -48,6 +50,8 @@
             --card-border: #d1d5db;
             --card-text-color: #111827;
             --h3-color: #1f2937;
+            --toggle-bg: rgba(203, 213, 225, 0.7);
+            --toggle-icon-color: #475569;
         }
         
         body {
@@ -107,7 +111,7 @@
             letter-spacing: 2px;
         }
         
-        /* --- NEW: Experience Card Expanding Hover --- */
+        /* --- Experience Card Expanding Hover --- */
         .experience-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -157,6 +161,42 @@
             font-size: 1rem;
             display: inline-block;
         }
+
+        /* --- NEW: Sun/Moon Theme Toggle --- */
+        #theme-toggle {
+            background-color: var(--toggle-bg);
+            border-radius: 9999px;
+            padding: 0.25rem;
+            width: 3.5rem; /* 56px */
+            height: 1.75rem; /* 28px */
+            display: flex;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+        }
+        #theme-toggle svg {
+            width: 1.25rem; /* 20px */
+            height: 1.25rem;
+            position: absolute;
+            transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            color: var(--toggle-icon-color);
+        }
+        .sun-icon {
+            opacity: 0;
+            transform: translateX(1.75rem) rotate(90deg);
+        }
+        .moon-icon {
+            transform: translateX(0.25rem) rotate(0);
+        }
+        html:not(.dark) .sun-icon {
+            opacity: 1;
+            transform: translateX(0.25rem) rotate(0);
+        }
+        html:not(.dark) .moon-icon {
+            opacity: 0;
+            transform: translateX(-1.75rem) rotate(-90deg);
+        }
+
     </style>
 </head>
 <body class="antialiased">
@@ -170,8 +210,9 @@
                 <a href="#skills" class="hover:text-pink-500 transition-colors duration-300">Skills</a>
                 <a href="#projects" class="hover:text-pink-500 transition-colors duration-300">Experience</a>
                 <a href="#contact" class="hover:text-pink-500 transition-colors duration-300">Contact</a>
-                <button id="theme-toggle" title="Toggle dark/light mode" class="w-14 h-7 rounded-full bg-gray-500/20 relative p-1 flex items-center transition-colors duration-500">
-                    <div id="theme-toggle-indicator" class="w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-500 dark:translate-x-[1.75rem]"></div>
+                <button id="theme-toggle" title="Toggle dark/light mode">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.106a.75.75 0 010 1.06l-1.591 1.59a.75.75 0 11-1.06-1.06l1.59-1.59a.75.75 0 011.06 0zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM17.803 17.803a.75.75 0 01-1.06 0l-1.59-1.591a.75.75 0 111.06-1.06l1.59 1.59a.75.75 0 010 1.06zM12 21a.75.75 0 01-.75-.75v-2.25a.75.75 0 011.5 0v2.25a.75.75 0 01-.75.75zM5.197 17.803a.75.75 0 010-1.06l1.59-1.591a.75.75 0 011.06 1.06l-1.59 1.59a.75.75 0 01-1.06 0zM3 12a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H3.75A.75.75 0 013 12zM6.107 6.106a.75.75 0 011.06 0l1.591 1.59a.75.75 0 01-1.06 1.06l-1.59-1.59a.75.75 0 010-1.06z"/></svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 004.463-.949a.75.75 0 01.981.651A10.503 10.503 0 0112 22.5A10.5 10.5 0 011.5 12c0-5.42 4.135-9.921 9.472-10.472a.75.75 0 01.556.19z" clip-rule="evenodd" /></svg>
                 </button>
             </div>
         </nav>
@@ -200,7 +241,7 @@
     <!-- Marquee Section -->
     <div class="marquee">
         <div id="marquee-content" class="marquee-content">
-            <span>KEEP SCROLLING >>       KEEP SCROLLING >>       KEEP SCROLLING >>       KEEP SCROLLING >>       KEEP SCROLLING >>       KEEP SCROLLING >>       KEEP SCROLLING >>       KEEP SCROLLING >>       KEEP SCROLLING >>      KEEP SCROLLING >>       KEEP SCROLLING >>       KEEP SCROLLING >>  </span>
+            <span>KEEP SCROLLING >> KEEP SCROLLING >> KEEP SCROLLING >> </span>
         </div>
     </div>
 
@@ -348,15 +389,27 @@
             // --- Dark/Light Mode Toggle ---
             const themeToggle = document.getElementById('theme-toggle');
             const html = document.documentElement;
-            const currentTheme = localStorage.getItem('theme');
-            if (currentTheme === 'light') {
+            // Function to apply theme based on class
+            const applyTheme = () => {
+                if (html.classList.contains('dark')) {
+                    // Dark mode is active
+                } else {
+                    // Light mode is active
+                }
+            };
+            // Check for saved theme in localStorage and apply it
+            if (localStorage.getItem('theme') === 'light') {
                 html.classList.remove('dark');
             } else {
                  html.classList.add('dark');
             }
+            applyTheme(); // Apply theme on initial load
+
             themeToggle.addEventListener('click', () => {
                 html.classList.toggle('dark');
+                // Save theme preference to localStorage
                 localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+                applyTheme();
             });
 
             // --- Live Clock ---
@@ -380,4 +433,4 @@
         });
     </script>
 </body>
-</html>
+</ht
