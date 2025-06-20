@@ -89,7 +89,7 @@
         .parallax-shape.two { background: rgba(139, 92, 246, 0.1); width: 200px; height: 200px; top: 50%; left: 80%; }
         .parallax-shape.three { background: rgba(236, 72, 153, 0.05); width: 100px; height: 100px; top: 70%; left: 10%; }
 
-        /* --- Marquee Scroll on Scroll --- */
+        /* --- Scroll-driven Marquee --- */
         .marquee {
             width: 100%;
             background-color: #ec4899;
@@ -101,37 +101,58 @@
         }
         .marquee-content {
             display: inline-block;
-            font-family: 'Pixelify Sans', sans-serif; /* NEW FONT */
+            font-family: 'Pixelify Sans', sans-serif;
             font-weight: 700;
-            font-size: 1.5rem; /* Increased size for pixel font */
+            font-size: 1.5rem;
             letter-spacing: 2px;
         }
         
-        /* --- Experience Card Hover --- */
+        /* --- NEW: Experience Card Expanding Hover --- */
         .experience-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             color: var(--card-text-color);
             border-radius: 1rem;
-            padding: 1.5rem;
-            height: 18rem; /* 288px */
+            padding: 2rem;
+            height: 14rem; /* Start with a smaller height */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            transition: all 0.4s ease;
-        }
-        .experience-card:hover {
-            transform: scale(1.05) translateY(-10px);
-            box-shadow: 0 0 25px rgba(139, 92, 246, 0.5);
-            border-color: rgba(167, 139, 250, 0.7);
+            overflow: hidden; /* Crucial for hiding content */
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); /* Smooth ease-out transition */
         }
         
-        /* --- NEW: Simplified Skill Tags --- */
+        .experience-card:hover {
+            height: 22rem; /* Expand height on hover */
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.4);
+        }
+
+        .experience-card .title {
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .experience-card:hover .title {
+            transform: translateY(-2rem); /* Move title up on hover */
+        }
+        
+        .experience-card .details {
+            opacity: 0;
+            max-height: 0;
+            transition: all 0.5s ease 0.1s; /* Delay appearance slightly */
+        }
+
+        .experience-card:hover .details {
+            opacity: 1;
+            max-height: 10rem; /* Make sure this is large enough */
+        }
+        
+        /* --- Simplified Skill Tags --- */
         .skill-tag {
             color: var(--text-color-secondary);
-            margin-right: 1.5rem; /* Use margin for spacing */
+            margin-right: 1.5rem;
             margin-bottom: 0.75rem;
             font-size: 1rem;
             display: inline-block;
@@ -149,7 +170,6 @@
                 <a href="#skills" class="hover:text-pink-500 transition-colors duration-300">Skills</a>
                 <a href="#projects" class="hover:text-pink-500 transition-colors duration-300">Experience</a>
                 <a href="#contact" class="hover:text-pink-500 transition-colors duration-300">Contact</a>
-                <!-- Dark Mode Toggle -->
                 <button id="theme-toggle" title="Toggle dark/light mode" class="w-14 h-7 rounded-full bg-gray-500/20 relative p-1 flex items-center transition-colors duration-500">
                     <div id="theme-toggle-indicator" class="w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-500 dark:translate-x-[1.75rem]"></div>
                 </button>
@@ -232,9 +252,36 @@
             <h2 class="text-4xl font-bold mb-4 text-center">My Experience</h2>
             <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-violet-600 mx-auto mb-12 rounded"></div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <div class="experience-card reveal"><h3 class="text-3xl font-bold">IoT Startup</h3><p class="text-secondary mt-2">Lead Product Designer</p></div>
-                <div class="experience-card reveal"><h3 class="text-3xl font-bold">Team Leadership</h3><p class="text-secondary mt-2">Team Rakshak & Inter-IIT</p></div>
-                <div class="experience-card reveal"><h3 class="text-3xl font-bold">Creator</h3><p class="text-secondary mt-2">Freelancer & YouTuber</p></div>
+                <!-- Card 1 -->
+                <div class="experience-card reveal">
+                    <div class="title">
+                        <h3 class="text-3xl font-bold">IoT Startup</h3>
+                        <p class="text-secondary mt-2">Lead Product Designer</p>
+                    </div>
+                    <div class="details">
+                        <p class="mt-4 text-sm text-secondary">Designed hardware enclosures, assisted with PCB integration, and led prototyping efforts.</p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                 <div class="experience-card reveal">
+                    <div class="title">
+                        <h3 class="text-3xl font-bold">Team Leadership</h3>
+                        <p class="text-secondary mt-2">Team Rakshak & Inter-IIT</p>
+                    </div>
+                    <div class="details">
+                        <p class="mt-4 text-sm text-secondary">VP of Marketing & Head of Design. Managed branding, apparel, and sponsorships.</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                 <div class="experience-card reveal">
+                    <div class="title">
+                        <h3 class="text-3xl font-bold">Creator</h3>
+                        <p class="text-secondary mt-2">Freelancer & YouTuber</p>
+                    </div>
+                    <div class="details">
+                        <p class="mt-4 text-sm text-secondary">Create tech content, edit videos, and build custom PC setups for clients and my channel.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -287,8 +334,9 @@
             const parallaxContainer = document.getElementById('parallax-container');
             window.addEventListener('mousemove', (e) => {
                 const { clientX, clientY } = e;
-                const x = (clientX / window.innerWidth - 0.5) * 2;
-                const y = (clientY / window.innerHeight - 0.5) * 2;
+                const x = (clientX / window.innerWidth - 0.5) * 2; // -1 to 1
+                const y = (clientY / window.innerHeight - 0.5) * 2; // -1 to 1
+                
                 if(parallaxContainer) {
                     for (const layer of parallaxContainer.children) {
                         const depth = layer.getAttribute('data-depth');
@@ -300,8 +348,8 @@
             // --- Dark/Light Mode Toggle ---
             const themeToggle = document.getElementById('theme-toggle');
             const html = document.documentElement;
-            // Check for saved theme in localStorage and apply it
-            if (localStorage.getItem('theme') === 'light') {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme === 'light') {
                 html.classList.remove('dark');
             } else {
                  html.classList.add('dark');
@@ -325,9 +373,8 @@
             const marqueeContent = document.getElementById('marquee-content');
             window.addEventListener('scroll', () => {
                 const scrollY = window.scrollY;
-                // Move marquee based on scroll position. The multiplier controls the speed.
                 if(marqueeContent) {
-                   marqueeContent.style.transform = `translateX(-${scrollY * 0.5}px)`;
+                   marqueeContent.style.transform = `translateX(-${scrollY * 0.2}px)`;
                 }
             });
         });
