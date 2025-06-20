@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project: IoT Startup - Shubham Dutta</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Reusing the same theme variables and base styles for consistency */
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color-primary: #e2e8f0;
+            --text-color-secondary: #94a3b8;
+            --header-bg: rgba(10, 10, 10, 0.5);
+            --section-bg: rgba(17, 24, 39, 0.3);
+        }
+        html:not(.dark) {
+            --bg-color: #f3f4f6;
+            --text-color-primary: #1f2937;
+            --text-color-secondary: #4b5563;
+            --header-bg: rgba(255, 255, 255, 0.5);
+            --section-bg: rgba(255, 255, 255, 0.3);
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color-primary);
+            font-family: 'Inter', sans-serif;
+        }
+        .text-secondary {
+            color: var(--text-color-secondary);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Header with a link back to the main portfolio -->
+    <header class="backdrop-blur-lg sticky top-0 z-50 border-b border-gray-500/20" style="background-color: var(--header-bg);">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold">Shubham Dutta</a>
+            <a href="index.html#projects" class="text-lg hover:text-pink-500 transition-colors duration-300">&larr; Back to Portfolio</a>
+        </nav>
+    </header>
+
+    <!-- Main content area for the project details -->
+    <main class="container mx-auto px-6 py-20">
+        <div class="max-w-4xl mx-auto backdrop-blur-sm p-8 md:p-12 rounded-2xl" style="background-color: var(--section-bg);">
+            <h1 class="text-4xl font-bold mb-2">IoT Startup</h1>
+            <p class="text-xl text-secondary mb-8">Lead Product Designer</p>
+            
+            <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-violet-600 mb-8 rounded"></div>
+
+            <!-- Demo content for the project -->
+            <div class="text-lg leading-relaxed space-y-6 text-secondary">
+                <p>In my role as the Lead Product Designer, I was at the forefront of hardware innovation. My primary responsibility was to translate conceptual ideas into tangible, functional prototypes that were both user-friendly and manufacturable.</p>
+                <p>This involved end-to-end mechanical design using SolidWorks, where I designed and iterated on custom enclosures to house our electronic components. I worked in close collaboration with the electrical engineering team to ensure seamless PCB integration, optimizing for space, thermal management, and ease of assembly.</p>
+                <h3 class="text-2xl font-bold text-primary pt-4">Key Contributions:</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>Led the mechanical design and prototyping of the product casing from concept to pre-production.</li>
+                    <li>Utilized FDM and SLA 3D printing for rapid prototyping, allowing for quick iteration and functional testing.</li>
+                    <li>Collaborated on PCB layout to ensure proper fit, port alignment, and function within the enclosure.</li>
+                    <li>Managed component sourcing and established relationships with manufacturers for small-batch production runs.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Consistent footer -->
+    <footer class="border-t border-gray-500/10 py-6">
+        <div class="container mx-auto px-6 text-secondary text-center">
+            <p>&copy; 2025 Shubham Dutta. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
