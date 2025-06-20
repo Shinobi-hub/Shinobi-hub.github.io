@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project: Creator - Shubham Dutta</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Reusing the same theme variables and base styles for consistency */
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color-primary: #e2e8f0;
+            --text-color-secondary: #94a3b8;
+            --header-bg: rgba(10, 10, 10, 0.5);
+            --section-bg: rgba(17, 24, 39, 0.3);
+        }
+        html:not(.dark) {
+            --bg-color: #f3f4f6;
+            --text-color-primary: #1f2937;
+            --text-color-secondary: #4b5563;
+            --header-bg: rgba(255, 255, 255, 0.5);
+            --section-bg: rgba(255, 255, 255, 0.3);
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color-primary);
+            font-family: 'Inter', sans-serif;
+        }
+        .text-secondary {
+            color: var(--text-color-secondary);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Header with a link back to the main portfolio -->
+    <header class="backdrop-blur-lg sticky top-0 z-50 border-b border-gray-500/20" style="background-color: var(--header-bg);">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold">Shubham Dutta</a>
+            <a href="index.html#projects" class="text-lg hover:text-pink-500 transition-colors duration-300">&larr; Back to Portfolio</a>
+        </nav>
+    </header>
+
+    <!-- Main content area for the project details -->
+    <main class="container mx-auto px-6 py-20">
+        <div class="max-w-4xl mx-auto backdrop-blur-sm p-8 md:p-12 rounded-2xl" style="background-color: var(--section-bg);">
+            <h1 class="text-4xl font-bold mb-2">Creator</h1>
+            <p class="text-xl text-secondary mb-8">Freelancer & YouTuber</p>
+            
+            <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-violet-600 mb-8 rounded"></div>
+
+            <!-- Existing content -->
+            <div class="text-lg leading-relaxed space-y-6 text-secondary">
+                <p>Beyond my academic and team commitments, I actively pursue my passion for digital creation. As a freelancer, I collaborate with clients on diverse projects, from graphic design to building custom PC setups tailored to their specific needs and budget.</p>
+                <p>My YouTube channel is my creative outlet for exploring and sharing my interests in technology. I script, film, and edit all my content, using DaVinci Resolve to produce high-quality videos that explain complex tech topics in an accessible and engaging way. This venture has honed my skills in storytelling, video production, and community engagement.</p>
+                <h3 class="text-2xl font-bold text-primary pt-4">Activities & Skills:</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>Produce and edit tech-focused video content for a growing YouTube channel.</li>
+                    <li>Offer freelance services for custom PC building, hardware consultation, and troubleshooting.</li>
+                    <li>Create graphic design assets for clients, including logos, social media banners, and branding materials.</li>
+                    <li>Continuously learning new software and production techniques to improve content quality.</li>
+                </ul>
+            </div>
+
+            <!-- NEW: Blender Renders Gallery Section -->
+            <div class="mt-16">
+                <h3 class="text-2xl font-bold text-primary pt-4">Blender Renders</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                    <!-- Image 1: Audi R8 -->
+                    <div>
+                        <img src="https://i.ibb.co/yVDn1vC/0001.png" alt="Blender render of a silver Audi R8 on a wet road" class="rounded-lg shadow-xl w-full h-auto transition-transform duration-300 hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/600x400/312e81/ffffff?text=Audi+R8';">
+                        <p class="text-center mt-4 text-secondary text-sm font-medium">Audi R8 on a misty road</p>
+                    </div>
+                    <!-- Image 2: Water Pitcher -->
+                    <div>
+                        <img src="https://i.ibb.co/P9LqgCR/Untitled.png" alt="Blender render of a glass pitcher and a dispenser" class="rounded-lg shadow-xl w-full h-auto transition-transform duration-300 hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/600x400/312e81/ffffff?text=Pitcher';">
+                        <p class="text-center mt-4 text-secondary text-sm font-medium">Glass Pitcher Concept</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Consistent footer -->
+    <footer class="border-t border-gray-500/10 py-6">
+        <div class="container mx-auto px-6 text-secondary text-center">
+            <p>&copy; 2025 Shubham Dutta. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
