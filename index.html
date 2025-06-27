@@ -197,6 +197,24 @@
             transform: translateX(0.25rem) rotate(-90deg);
         }
 
+        /* Portfolio Image Grid (removed as per request, but keeping style block for reference) */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .portfolio-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        .portfolio-grid img:hover {
+            transform: scale(1.05);
+        }
+
     </style>
 </head>
 <body class="antialiased">
@@ -333,6 +351,19 @@
                         </div>
                         <div class="details">
                             <p class="mt-4 text-sm text-secondary">Create tech content, edit videos, and build custom PC setups for clients and my channel.</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- New Card: Portfolio - now a clickable link -->
+                <a href="portfolio-details.html" class="block">
+                    <div class="experience-card reveal">
+                        <div class="title">
+                            <h3 class="text-3xl font-bold">Portfolio</h3>
+                            <p class="text-secondary mt-2">My Creative Works</p>
+                        </div>
+                        <div class="details">
+                            <p class="mt-4 text-sm text-secondary">Explore a collection of my creative design and art projects.</p>
                         </div>
                     </div>
                 </a>
