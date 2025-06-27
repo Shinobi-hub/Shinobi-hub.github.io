@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shubham Dutta - Portfolio</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter for main text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.5s ease, color 0.5s ease;
+            background-color: #0a0a0a; /* Dark mode default */
+            color: #e2e8f0; /* Dark mode text */
+        }
+
+        /* Light Mode */
+        html:not(.dark) body {
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .text-gradient {
+            background-image: linear-gradient(to right, #ec4899, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Portfolio Image Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+        .portfolio-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            object-fit: cover; /* Ensures images cover the area without distortion */
+        }
+        .portfolio-grid img:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation Header -->
+    <header class="backdrop-blur-lg sticky top-0 z-50 border-b border-gray-500/20 py-4" style="background-color: rgba(10, 10, 10, 0.5);">
+        <nav class="container mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-gradient hover:opacity-80 transition-opacity">
+                &lt; Back to Home
+            </a>
+            <h1 class="text-3xl font-extrabold text-white">My Portfolio</h1>
+        </nav>
+    </header>
+
+    <!-- Portfolio Section -->
+    <section class="py-12">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-8 text-center text-gradient">My Creative Works</h2>
+            <div class="portfolio-grid">
+                <!-- Portfolio Image 1 -->
+                <img src="92489723_p0.jpg-f52ed420-0352-4a28-90dc-aa6bbf4dd294" alt="Digital Art - Jett from Valorant" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0a0a0a/e2e8f0?text=Image+1';">
+                
+                <!-- Portfolio Image 2 -->
+                <img src="100143095_p0.png-d4df8d91-45aa-4916-be59-fadbddd9b182" alt="Digital Painting - Girl in Park" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0a0a0a/e2e8f0?text=Image+2';">
+                
+                <!-- Portfolio Image 3 -->
+                <img src="101117665_p0.png-e443860a-7e6d-4893-8490-289aa8498526" alt="Comic Strip - Work Hard" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0a0a0a/e2e8f0?text=Image+3';">
+                
+                <!-- Portfolio Image 4 -->
+                <img src="92489775_p0.jpg-b07ecdbc-a88e-4e15-85da-2951ad4c2c2b" alt="Anime Style Character Art" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0a0a0a/e2e8f0?text=Image+4';">
+                
+                <!-- Portfolio Image 5 -->
+                <img src="95292547_p0.png-f4832aab-cb4b-4211-afb9-c710bc46a511" alt="Digital Portrait - Anime Girl" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0a0a0a/e2e8f0?text=Image+5';">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-500/10 py-6 text-center text-gray-400">
+        <p>&copy; 2025 Shubham Dutta. All Rights Reserved.</p>
+    </footer>
+    
+</body>
+</html>
